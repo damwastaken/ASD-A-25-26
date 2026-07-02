@@ -1,0 +1,133 @@
+#include <iostream>
+using namespace std;
+
+typedef struct node *alamatnode;
+
+typedef struct node {
+    char INFO;
+    alamatnode RIGHT;
+    alamatnode LEFT;
+} NODE;
+
+typedef struct {
+    NODE *root;
+} TREE;
+
+void BuatTree(char C, TREE *T) {
+    NODE *Baru = new NODE;
+    Baru->INFO = C;
+    Baru->RIGHT = NULL;
+    Baru->LEFT = NULL;
+    T->root = Baru;
+}
+
+void TambahKanan(char C, NODE *root) {
+    if (root->RIGHT == NULL) {
+        NODE *Baru = new NODE;
+        Baru->INFO = C;
+        Baru->RIGHT = NULL;
+        Baru->LEFT = NULL;
+        root->RIGHT = Baru;
+    } else {
+        cout << "Sub Tree Kanan telah diisi" << endl;
+    }
+}
+
+void TambahKiri(char C, NODE *root) {
+    if (root->LEFT == NULL) {
+        NODE *Baru = new NODE;
+        Baru->INFO = C;
+        Baru->RIGHT = NULL;
+        Baru->LEFT = NULL;
+        root->LEFT = Baru;
+    } else {
+        cout << "Sub Tree Kiri telah diisi" << endl;
+    }
+}
+
+void CopyTree(NODE *root1, NODE **root2) {
+    if (root1 != NULL) {
+        *root2 = new NODE;
+        (*root2)->INFO = root1->INFO;
+        (*root2)->LEFT = NULL;
+        (*root2)->RIGHT = NULL;
+
+        CopyTree(root1->LEFT, &(*root2)->LEFT);
+        CopyTree(root1->RIGHT, &(*root2)->RIGHT);
+    } else {
+        *root2 = NULL;
+    }
+}
+
+bool isEqual(NODE *root1, NODE *root2) {
+    if (root1 == NULL && root2 == NULL)
+        return true;
+
+    if (root1 == NULL || root2 == NULL)
+        return false;
+
+    return (root1->INFO == root2->INFO) &&
+           isEqual(root1->LEFT, root2->LEFT) &&
+           isEqual(root1->RIGHT, root2->RIGHT);
+}
+
+void CetakTreePreOrder(NODE *root) {
+    if (root != NULL) {
+        cout << root->INFO << " ";
+        CetakTreePreOrder(root->LEFT);
+        CetakTreePreOrder(root->RIGHT);
+    }
+}
+
+void CetakTreeInOrder(NODE *root) {
+    if (root != NULL) {
+        CetakTreeInOrder(root->LEFT);
+        cout << root->INFO << " ";
+        CetakTreeInOrder(root->RIGHT);
+    }
+}
+
+void CetakTreePostOrder(NODE *root) {
+    if (root != NULL) {
+        CetakTreePostOrder(root->LEFT);
+        CetakTreePostOrder(root->RIGHT);
+        cout << root->INFO << " ";
+    }
+}
+
+int main() {
+    TREE T;
+    char root,V,W,Y,Z;
+    cout<<"Masukkan data Root           :";cin>>root;
+    cout<<"Masukkan data Leaf Kiri-Kiri : ";cin>>V;
+    cout<<"Masukkan data Leaf Kiri-Kanan: ";cin>>W;
+    cout<<"Masukkan data Leaf Kanan-Kiri: ";cin>>Y;
+    cout << "Masukkan data Leaf Kanan-Kanan: ";cin>>Z;
+    BuatTree(root, &T);
+    TambahKiri('S', T.root);
+    TambahKanan('U', T.root);
+    TambahKiri(V, T.root->LEFT);
+    TambahKanan(W, T.root->LEFT);
+    TambahKiri(Y, T.root->RIGHT);
+    TambahKanan(Z, T.root->RIGHT);
+    cout << endl;
+    cout << " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << endl;
+    cout << " ~~~~~~     PREORDER       ~~~~~~ " << endl;
+    cout << " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << endl;
+    cout << endl;
+    CetakTreePreOrder(T.root);
+    cout << endl << endl;
+    cout << " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << endl;
+    cout << " ~~~~~~     INORDER        ~~~~~~ " << endl;
+    cout << " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << endl;
+    cout << endl;
+    CetakTreeInOrder(T.root);
+    cout << endl << endl;
+    cout << " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << endl;
+    cout << " ~~~~~~     POSTORDER      ~~~~~~ " << endl;
+    cout << " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << endl;
+    cout << endl;
+    CetakTreePostOrder(T.root);
+    cout << endl;
+    return 0;
+}
